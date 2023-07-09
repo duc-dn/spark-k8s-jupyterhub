@@ -56,3 +56,5 @@ conda install ipykernel
 ```
 jupyter kernelspec uninstall new-env
 ```
+---
+![Alt text](image.png)
