@@ -1,0 +1,14 @@
+singleuser:
+  cpu:
+    limit: 1
+    guarantee: 0.5
+  memory:
+    limit: 2G
+    guarantee: 1G
+  defaultUrl: "/lab"
+  serviceAccountName: spark
+  image:
+    name: ducdn01/singleuser
+    tag: v7
+    pullPolicy: IfNotPresent
+    pullSecrets: []
