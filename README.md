@@ -1,8 +1,10 @@
 ## spark k8s jupyterhub, anaconda environment
-Spark in k8s on jupyterhub materials 
+Spark in k8s on jupyterhub materials
+---
+![Alt text](image.png) 
 
-Blog post https://dev.to/akoshel/spark-on-k8s-in-jupyterhub-1da2
-If using minikube, `minikube ip` to get ip of master
+- Blog post https://dev.to/akoshel/spark-on-k8s-in-jupyterhub-1da2
+- If using minikube, `minikube ip` to get ip of master
 ```
 spark-submit \
   --master k8s://https://192.168.49.2:8443 \
@@ -57,5 +59,3 @@ conda install ipykernel
 ```
 jupyter kernelspec uninstall new-env
 ```
----
-![Alt text](image.png)
