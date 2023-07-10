@@ -1,5 +1,5 @@
 ## spark k8s jupyterhub, anaconda environment
-Spark in k8s on jupyterhub materials
+- Spark in k8s on jupyterhub materials
 ---
 ![Alt text](image.png) 
 
