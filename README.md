@@ -1,8 +1,8 @@
-# spark-k8s-jupyterhub
-Spark in k8s on jupyterhub materials
+## spark k8s jupyterhub, anaconda environment
+Spark in k8s on jupyterhub materials 
 
 Blog post https://dev.to/akoshel/spark-on-k8s-in-jupyterhub-1da2
-
+If using minikube, `minikube ip` to get ip of master
 ```
 spark-submit \
   --master k8s://https://192.168.49.2:8443 \
@@ -19,6 +19,7 @@ spark-submit \
   local:///opt/spark/examples/jars/spark-examples_2.12-3.2.2.jar 1000
 ```
 ---
+Example pyspark in notebook
 ```
 spark = (
     SparkSession.builder.appName("hello").master("k8s://https://192.168.49.2:8443") # Your master address name
@@ -38,7 +39,7 @@ spark = (
 ```
 ---
 ### Actice anaconda eviroment
-- Create enviroment 
+- Create enviroment anaconda
 ```
 conda create --name <env_name>
 ```
