@@ -6,6 +6,12 @@
 - Blog post https://dev.to/akoshel/spark-on-k8s-in-jupyterhub-1da2
 - If using minikube, `minikube ip` to get ip of master
 ```
+kubectl apply -f spark_ns.yaml
+kubectl apply -f spark_sa.yaml
+kubectl apply -f spark_sa_role.yaml
+```
+---
+```
 spark-submit \
   --master k8s://https://192.168.49.2:8443 \
   --deploy-mode cluster \
@@ -23,6 +29,14 @@ spark-submit \
 ---
 Example pyspark in notebook
 ```
+kubectl apply -f jupyterhub_ns.yaml 
+kubectl apply -f jupyterhub_sa.yaml
+kubectl apply -f jupyterhub_sa_role.yaml
+
+kubectl apply -f driver_service.yaml
+```
+
+```
 spark = (
     SparkSession.builder.appName("hello").master("k8s://https://192.168.49.2:8443") # Your master address name
     .config("spark.kubernetes.container.image", "ducdn01/pyspark:latest") # Spark image name
@@ -38,6 +52,28 @@ spark = (
     .config("spark.kubernetes.container.image.pullPolicy", "IfNotPresent")
     .getOrCreate()
 )
+```
+
+```
+from pyspark.sql import SparkSession
+
+simpleData = [("James","Sales","NY",90000,34,10000),
+    ("Michael","Sales","NY",86000,56,20000),
+    ("Robert","Sales","CA",81000,30,23000),
+    ("Maria","Finance","CA",90000,24,23000),
+    ("Raman","Finance","CA",99000,40,24000),
+    ("Scott","Finance","NY",83000,36,19000),
+    ("Jen","Finance","NY",79000,53,15000),
+    ("Jeff","Marketing","CA",80000,25,18000),
+    ("Kumar","Marketing","NY",91000,50,21000)
+  ]
+
+schema = ["employee_name","department","state","salary","age","bonus"]
+df = spark.createDataFrame(data=simpleData, schema = schema)
+df.printSchema()
+df.show(truncate=False)
+
+df.groupBy("department").sum("salary").show(truncate=False)
 ```
 ---
 ### Actice anaconda eviroment
