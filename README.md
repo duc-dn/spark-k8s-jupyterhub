@@ -53,6 +53,16 @@ spark = (
     .getOrCreate()
 )
 ```
+---
+JupyterHub Helm Chart
+```
+helm upgrade --cleanup-on-fail \
+--install jupyterhub jupyterhub/jupyterhub \
+--namespace jupyterhub \
+--create-namespace \
+--version=2.0.0 \
+--values jhub_values.yaml
+```
 
 ```
 from pyspark.sql import SparkSession
@@ -75,6 +85,10 @@ df.show(truncate=False)
 
 df.groupBy("department").sum("salary").show(truncate=False)
 ```
+
+```
+/var/run/secrets/kubernetes.io/serviceaccount
+```
 ---
 ### Actice anaconda eviroment
 - Create enviroment anaconda
@@ -88,6 +102,17 @@ source activate <env_name>
 - Install ipykernel
 ```
 conda install ipykernel
+```
+- Add kernel in JupyterHub
+```
+python -m ipykernel install --user --name <enviroment name> –display-name "your name eviroment"
+```
+- Check anaconda in JupyterHub
+```
+import conda
+
+anaconda_version = conda.__version__
+print("Phiên bản Anaconda đang được sử dụng là:", anaconda_version)
 ```
 - References: https://towardsdatascience.com/get-your-conda-environment-to-show-in-jupyter-notebooks-the-easy-way-17010b76e874
 ---
