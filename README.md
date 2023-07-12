@@ -48,6 +48,11 @@ helm upgrade --cleanup-on-fail \
 ```
 
 Spark Test
+Install pyspark
+```
+pip install pyspark==3.2.2
+```
+
 ```
 from pyspark.sql import SparkSession
 
