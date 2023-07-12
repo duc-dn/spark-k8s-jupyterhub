@@ -48,7 +48,7 @@ helm upgrade --cleanup-on-fail \
 ```
 
 Spark Test
-Install pyspark
+- Install pyspark
 ```
 pip install pyspark==3.2.2
 ```
