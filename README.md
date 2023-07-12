@@ -11,6 +11,7 @@ kubectl apply -f spark_sa.yaml
 kubectl apply -f spark_sa_role.yaml
 ```
 ---
+Test Spark submit
 ```
 spark-submit \
   --master k8s://https://192.168.49.2:8443 \
@@ -27,31 +28,13 @@ spark-submit \
   local:///opt/spark/examples/jars/spark-examples_2.12-3.2.2.jar 1000
 ```
 ---
-Example pyspark in notebook
+Create Jupyter Hub
 ```
 kubectl apply -f jupyterhub_ns.yaml 
 kubectl apply -f jupyterhub_sa.yaml
 kubectl apply -f jupyterhub_sa_role.yaml
 
 kubectl apply -f driver_service.yaml
-```
-
-```
-spark = (
-    SparkSession.builder.appName("hello").master("k8s://https://192.168.49.2:8443") # Your master address name
-    .config("spark.kubernetes.container.image", "ducdn01/pyspark:latest") # Spark image name
-    .config("spark.driver.port", "2222") # Needs to match svc
-    .config("spark.driver.blockManager.port", "7777")
-    .config("spark.driver.host", "driver-service.jupyterhub.svc.cluster.local") # Needs to match svc
-    .config("spark.driver.bindAddress", "0.0.0.0")
-    .config("spark.kubernetes.namespace", "spark")
-    .config("spark.kubernetes.authenticate.driver.serviceAccountName", "spark")
-    .config("spark.kubernetes.authenticate.serviceAccountName", "spark")
-
-    .config("spark.executor.instances", "2")
-    .config("spark.kubernetes.container.image.pullPolicy", "IfNotPresent")
-    .getOrCreate()
-)
 ```
 ---
 JupyterHub Helm Chart
@@ -64,8 +47,26 @@ helm upgrade --cleanup-on-fail \
 --values jhub_values.yaml
 ```
 
+Spark Test
 ```
 from pyspark.sql import SparkSession
+
+# create spark session
+spark = (
+    SparkSession.builder.appName("hello").master("k8s://https://192.168.49.2:8443") # Your master address name
+    .config("spark.kubernetes.container.image", "ducdn01/pyspark:latest") # Spark image name
+    .config("spark.driver.port", "2222") # Needs to match svc
+    .config("spark.driver.blockManager.port", "7777")
+    .config("spark.driver.host", "driver-service.jupyterhub.svc.cluster.local") # Needs to match svc
+    .config("spark.driver.bindAddress", "0.0.0.0")
+    .config("spark.kubernetes.namespace", "spark")
+    .config("spark.kubernetes.authenticate.driver.serviceAccountName", "spark")
+    .config("spark.kubernetes.authenticate.serviceAccountName", "spark")
+
+    .config("spark.executor.instances", "2") # Specified the number of excutor
+    .config("spark.kubernetes.container.image.pullPolicy", "IfNotPresent")
+    .getOrCreate()
+)
 
 simpleData = [("James","Sales","NY",90000,34,10000),
     ("Michael","Sales","NY",86000,56,20000),
@@ -85,9 +86,9 @@ df.show(truncate=False)
 
 df.groupBy("department").sum("salary").show(truncate=False)
 ```
-
+- Note: Stop spark session (pod worker is deleted)
 ```
-/var/run/secrets/kubernetes.io/serviceaccount
+spark.stop()
 ```
 ---
 ### Actice anaconda eviroment
